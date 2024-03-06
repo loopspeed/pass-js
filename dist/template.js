@@ -13,7 +13,6 @@ const pass_1 = require("./pass");
 const constants_1 = require("./constants");
 const base_pass_1 = require("./lib/base-pass");
 const yazul_promisified_1 = require("./lib/yazul-promisified");
-const strip_json_comments_1 = require("strip-json-comments");
 const { HTTP2_HEADER_METHOD, HTTP2_HEADER_PATH, NGHTTP2_CANCEL, HTTP2_METHOD_POST, } = http2.constants;
 const { readFile, readdir } = fs_1.promises;
 // Create a new template.
@@ -51,7 +50,7 @@ class Template extends base_pass_1.PassBase {
         if (entries.find(entry => entry.isFile() && entry.name === 'pass.json')) {
             // loading main JSON file
             const jsonContent = await readFile((0, path_1.join)(folderPath, 'pass.json'), 'utf8');
-            const passJson = JSON.parse((0, strip_json_comments_1.default)(jsonContent));
+            const passJson = JSON.parse(jsonContent);
             // Trying to detect the type of pass
             let type;
             for (const t of constants_1.PASS_STYLES) {
@@ -132,7 +131,7 @@ class Template extends base_pass_1.PassBase {
                 const buf = await zip.getBuffer(entry);
                 if ((0, buffer_crc32_1.unsigned)(buf) !== entry.crc32)
                     throw new Error(`CRC32 does not match for ${entry.fileName}, expected ${entry.crc32}, got ${(0, buffer_crc32_1.unsigned)(buf)}`);
-                const passJSON = JSON.parse((0, strip_json_comments_1.default)(buf.toString('utf8')));
+                const passJSON = JSON.parse(buf.toString('utf8'));
                 template = new Template(undefined, passJSON, template.images, template.localization, options);
             }
             else {
