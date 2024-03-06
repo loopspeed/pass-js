@@ -17,7 +17,7 @@ import { PassStyle, ApplePass, Options } from './interfaces';
 import { PassBase } from './lib/base-pass';
 import { unzipBuffer } from './lib/yazul-promisified';
 
-import stripJsonComments = require('strip-json-comments');
+import stripJsonComments from 'strip-json-comments';
 
 const {
   HTTP2_HEADER_METHOD,
@@ -183,8 +183,7 @@ export class Template extends PassBase {
         const buf = await zip.getBuffer(entry);
         if (crc32(buf) !== entry.crc32)
           throw new Error(
-            `CRC32 does not match for ${entry.fileName}, expected ${
-              entry.crc32
+            `CRC32 does not match for ${entry.fileName}, expected ${entry.crc32
             }, got ${crc32(buf)}`,
           );
         const passJSON = JSON.parse(stripJsonComments(buf.toString('utf8')));
@@ -202,8 +201,7 @@ export class Template extends PassBase {
           const imgBuffer = await zip.getBuffer(entry);
           if (crc32(imgBuffer) !== entry.crc32)
             throw new Error(
-              `CRC32 does not match for ${entry.fileName}, expected ${
-                entry.crc32
+              `CRC32 does not match for ${entry.fileName}, expected ${entry.crc32
               }, got ${crc32(imgBuffer)}`,
             );
           await template.images.add(
@@ -362,6 +360,6 @@ export class Template extends PassBase {
   }
 }
 
-function createDefaultTemplate(options?: Options): Template{
+function createDefaultTemplate(options?: Options): Template {
   return new Template(undefined, {}, undefined, undefined, options)
 }
